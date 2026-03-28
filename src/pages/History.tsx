@@ -40,7 +40,7 @@ export function History({ tasks, switches }: HistoryProps) {
                         return (
                             <div
                                 key={task.id}
-                                className="relative flex items-start gap-6 pl-4"
+                                className="relative flex items-start gap-3 sm:gap-6 pl-4"
                             >
                                 <div
                                     className={cn(
@@ -53,7 +53,7 @@ export function History({ tasks, switches }: HistoryProps) {
 
                                 <Card className="flex-1">
                                     <CardContent className="p-4">
-                                        <div className="flex items-center justify-between mb-2">
+                                        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between mb-2">
                                             <div className="flex items-center gap-2">
                                                 <Badge
                                                     variant="outline"
@@ -73,7 +73,7 @@ export function History({ tasks, switches }: HistoryProps) {
                                                     </Badge>
                                                 )}
                                             </div>
-                                            <div className="text-xs text-muted-foreground flex items-center gap-1">
+                                            <div className="text-xs text-muted-foreground flex flex-wrap sm:flex-nowrap items-center gap-x-1 gap-y-1">
                                                 <LucideClock className="w-3 h-3" />
                                                 {format(
                                                     task.startTime,
@@ -94,14 +94,14 @@ export function History({ tasks, switches }: HistoryProps) {
                                         )}
 
                                         {relevantSwitch && (
-                                            <div className="mt-3 pt-3 border-t flex items-center gap-2 text-xs text-destructive">
+                                            <div className="mt-3 pt-3 border-t flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-destructive break-words">
                                                 <LucideArrowRight className="w-3 h-3" />
                                                 Context switch from{" "}
                                                 {relevantSwitch.fromTask.replace(
                                                     "-",
                                                     " ",
                                                 )}
-                                                <span className="font-bold">
+                                                <span className="font-bold whitespace-nowrap">
                                                     +
                                                     {Math.round(
                                                         relevantSwitch.penaltyMinutes,
