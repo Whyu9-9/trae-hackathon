@@ -288,8 +288,8 @@ export function Analytics({ tasks, switches }: AnalyticsProps) {
                             <tbody>
                                 {transitionData.map((row, i) => (
                                     <tr key={i}>
-                                        <td className="p-2 border border-border font-medium bg-muted/30 capitalize whitespace-nowrap">
-                                            {row.name.substring(0, 10)}
+                                        <td className="p-2 border border-border font-medium bg-muted/30 capitalize whitespace-nowrap min-w-[140px]">
+                                            {row.name}
                                         </td>
                                         {[
                                             "project-work",
