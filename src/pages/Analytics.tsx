@@ -140,8 +140,13 @@ export function Analytics({ tasks, switches, exportMode }: AnalyticsProps) {
                             <InfoTooltip content="Shows the count of each task type logged today." />
                         </div>
                     </CardHeader>
-                    <CardContent className={chartHeightClass}>
-                        <ResponsiveContainer width="100%" height="100%">
+                    <CardContent className={`${chartHeightClass} min-w-0`}>
+                        <ResponsiveContainer
+                            width="100%"
+                            height="100%"
+                            minWidth={1}
+                            minHeight={1}
+                        >
                             <BarChart data={distributionData}>
                                 <CartesianGrid
                                     strokeDasharray="3 3"
@@ -185,8 +190,13 @@ export function Analytics({ tasks, switches, exportMode }: AnalyticsProps) {
                             <InfoTooltip content="Total minutes spent on each task type today." />
                         </div>
                     </CardHeader>
-                    <CardContent className={chartHeightClass}>
-                        <ResponsiveContainer width="100%" height="100%">
+                    <CardContent className={`${chartHeightClass} min-w-0`}>
+                        <ResponsiveContainer
+                            width="100%"
+                            height="100%"
+                            minWidth={1}
+                            minHeight={1}
+                        >
                             <PieChart>
                                 <Pie
                                     data={durationData}
@@ -227,8 +237,13 @@ export function Analytics({ tasks, switches, exportMode }: AnalyticsProps) {
                         <InfoTooltip content="Frequency of task starts throughout the day." />
                     </div>
                 </CardHeader>
-                <CardContent className={chartHeightClass}>
-                    <ResponsiveContainer width="100%" height="100%">
+                <CardContent className={`${chartHeightClass} min-w-0`}>
+                    <ResponsiveContainer
+                        width="100%"
+                        height="100%"
+                        minWidth={1}
+                        minHeight={1}
+                    >
                         <LineChart data={hourlyData}>
                             <CartesianGrid
                                 strokeDasharray="3 3"
