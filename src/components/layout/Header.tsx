@@ -32,7 +32,7 @@ export function Header() {
             const importedTasks = await importTasks(file);
             importAllTasks(importedTasks);
             toast.success("Tasks imported successfully");
-        } catch (error) {
+        } catch {
             toast.error("Failed to import tasks");
         }
     };

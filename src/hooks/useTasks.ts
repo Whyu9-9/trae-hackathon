@@ -11,17 +11,17 @@ const SIMILARITY_MATRIX: Partial<
 };
 
 export const useTasks = () => {
-    const [tasks, setTasks] = useState<TaskEntry[]>([]);
+    const [tasks, setTasks] = useState<TaskEntry[]>(loadTasks);
 
     const activeTask = useMemo(
         () => tasks.find((t) => t.isActive) || null,
         [tasks],
     );
 
+    // Persist tasks whenever they change
     useEffect(() => {
-        const loadedTasks = loadTasks();
-        setTasks(loadedTasks);
-    }, []);
+        saveTasks(tasks);
+    }, [tasks]);
 
     const calculatePenalty = (from: TaskType, to: TaskType): number => {
         const base = BASE_PENALTIES[to];
@@ -65,7 +65,6 @@ export const useTasks = () => {
                 };
 
                 const final = [...updated, newTask];
-                saveTasks(final);
                 return final;
             });
         },
@@ -78,19 +77,16 @@ export const useTasks = () => {
             const final = prev.map((t) =>
                 t.isActive ? { ...t, isActive: false, endTime: now } : t,
             );
-            saveTasks(final);
             return final;
         });
     }, []);
 
     const clearAllTasks = useCallback(() => {
         setTasks([]);
-        saveTasks([]);
     }, []);
 
     const importAllTasks = useCallback((importedTasks: TaskEntry[]) => {
         setTasks(importedTasks);
-        saveTasks(importedTasks);
     }, []);
 
     return {

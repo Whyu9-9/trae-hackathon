@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/select";
 import { TASK_TYPES, type TaskType } from "@/types/task";
 import { Toaster } from "sonner";
+import { Footer } from "@/components/layout/Footer";
 
 function App() {
     const { tasks, activeTask, contextSwitches, startTask, stopTask } =
@@ -164,6 +165,7 @@ function App() {
                 </Tabs>
             </main>
 
+            <Footer />
             <Toaster position="bottom-right" theme="dark" />
         </div>
     );
