@@ -43,7 +43,7 @@ export function Header() {
                 <div className="flex items-center gap-2">
                     <LucideLayout className="w-6 h-6 text-primary" />
                     <h1 className="text-xl font-bold tracking-tight">
-                        Focus OS
+                        Trae Hackathon
                     </h1>
                 </div>
 
@@ -93,7 +93,7 @@ export function Header() {
                                     after a significant interruption.
                                 </p>
                                 <p>
-                                    <strong>Recovery:</strong> Focus OS helps
+                                    <strong>Recovery:</strong> This tool helps
                                     you track these switches and quantify the
                                     time lost to help you build better focus
                                     habits.

@@ -1,13 +1,13 @@
-# Requirements — Focus OS: Context Switch Tracker
+# Requirements — Context Switch Tracker
 
-**Product:** Focus OS
+**Product:** Trae Hackathon - Context Switch Tracker
 **Date:** 2026-03-28
 
 ---
 
 ## 1. Overview
 
-Focus OS is a client-side web application that helps knowledge workers track task switching throughout their workday and quantify the cognitive cost (productivity penalty) of context switching. The app provides analytics, insights, and recommendations to reduce unproductive interruptions.
+This tool is a client-side web application that helps knowledge workers track task switching throughout their workday and quantify the cognitive cost (productivity penalty) of context switching. The app provides analytics, insights, and recommendations to reduce unproductive interruptions.
 
 ---
 
