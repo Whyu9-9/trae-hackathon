@@ -193,6 +193,7 @@ function App() {
                                     <div className="space-y-4 pt-4">
                                         <div className="space-y-2">
                                             <Label>Task Type</Label>
+                                            <div className="size-1"></div>
                                             <Select
                                                 value={newType}
                                                 onValueChange={(v) =>
@@ -222,6 +223,7 @@ function App() {
                                             <Label>
                                                 Description (Optional)
                                             </Label>
+                                            <div className="size-1"></div>
                                             <Input
                                                 placeholder="What are you working on?"
                                                 value={newDesc}
