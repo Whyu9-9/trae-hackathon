@@ -3,6 +3,7 @@ import type { TaskEntry, ContextSwitchPenalty } from "@/types/task";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { InstrumentStrip } from "@/components/dashboard/InstrumentStrip";
 import { LucideZap, LucideAlertTriangle } from "lucide-react";
+import { InfoTooltip } from "@/components/ui/info-tooltip";
 
 interface OverviewProps {
   tasks: TaskEntry[];
@@ -37,7 +38,10 @@ export function Overview({ tasks, switches, activeTask }: OverviewProps) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Cognitive Load Score</CardTitle>
+            <div className="flex items-center gap-2">
+              <CardTitle className="text-sm font-medium">Cognitive Load Score</CardTitle>
+              <InfoTooltip content="A score representing the mental energy required to handle today's context switches. Higher scores indicate more mental strain." />
+            </div>
             <LucideZap className="h-4 w-4 text-primary" />
           </CardHeader>
           <CardContent>
@@ -50,7 +54,10 @@ export function Overview({ tasks, switches, activeTask }: OverviewProps) {
         
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Most Costly Transition</CardTitle>
+            <div className="flex items-center gap-2">
+              <CardTitle className="text-sm font-medium">Most Costly Transition</CardTitle>
+              <InfoTooltip content="The specific task switch that resulted in the highest calculated focus recovery penalty." />
+            </div>
             <LucideAlertTriangle className="h-4 w-4 text-destructive" />
           </CardHeader>
           <CardContent>

@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import type { TaskEntry, TaskType } from "@/types/task";
+import type { TaskEntry, TaskType, ContextSwitchPenalty } from "@/types/task";
 import { TASK_COLORS } from "@/types/task";
 import {
     BarChart,
@@ -18,12 +18,14 @@ import {
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getHours } from "date-fns";
+import { InfoTooltip } from "@/components/ui/info-tooltip";
 
 interface AnalyticsProps {
     tasks: TaskEntry[];
+    switches: ContextSwitchPenalty[];
 }
 
-export function Analytics({ tasks }: AnalyticsProps) {
+export function Analytics({ tasks, switches }: AnalyticsProps) {
     const distributionData = useMemo(() => {
         const counts: Record<string, number> = {};
         tasks.forEach((task) => {
@@ -35,6 +37,47 @@ export function Analytics({ tasks }: AnalyticsProps) {
             type: type as TaskType,
         }));
     }, [tasks]);
+
+    const transitionData = useMemo(() => {
+        const transitions: Record<string, Record<string, number>> = {};
+        const types = [
+            "project-work",
+            "meeting",
+            "communication",
+            "documentation",
+            "creative-work",
+            "research",
+            "planning",
+            "break",
+        ];
+
+        // Initialize matrix
+        types.forEach((from) => {
+            transitions[from] = {};
+            types.forEach((to) => {
+                transitions[from][to] = 0;
+            });
+        });
+
+        // Count transitions
+        switches.forEach((sw) => {
+            if (transitions[sw.fromTask] && transitions[sw.fromTask][sw.toTask] !== undefined) {
+                transitions[sw.fromTask][sw.toTask]++;
+            }
+        });
+
+        // Convert to probability matrix
+        return types.map((from) => {
+            const row: Record<string, any> = { name: from.replace("-", " ") };
+            const totalFrom = Object.values(transitions[from]).reduce((a, b) => a + b, 0);
+            
+            types.forEach((to) => {
+                const count = transitions[from][to];
+                row[to] = totalFrom > 0 ? parseFloat(((count / totalFrom) * 100).toFixed(1)) : 0;
+            });
+            return row;
+        });
+    }, [switches]);
 
     const hourlyData = useMemo(() => {
         const hours: Record<number, number> = {};
@@ -71,10 +114,13 @@ export function Analytics({ tasks }: AnalyticsProps) {
         <div className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <Card>
-                    <CardHeader>
-                        <CardTitle className="text-sm font-medium">
-                            Task Type Distribution
-                        </CardTitle>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                        <div className="flex items-center gap-2">
+                            <CardTitle className="text-sm font-medium">
+                                Task Type Distribution
+                            </CardTitle>
+                            <InfoTooltip content="Shows the count of each task type logged today." />
+                        </div>
                     </CardHeader>
                     <CardContent className="h-[300px]">
                         <ResponsiveContainer width="100%" height="100%">
@@ -110,10 +156,13 @@ export function Analytics({ tasks }: AnalyticsProps) {
                 </Card>
 
                 <Card>
-                    <CardHeader>
-                        <CardTitle className="text-sm font-medium">
-                            Time Allocation (Minutes)
-                        </CardTitle>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                        <div className="flex items-center gap-2">
+                            <CardTitle className="text-sm font-medium">
+                                Time Allocation (Minutes)
+                            </CardTitle>
+                            <InfoTooltip content="Total minutes spent on each task type today." />
+                        </div>
                     </CardHeader>
                     <CardContent className="h-[300px]">
                         <ResponsiveContainer width="100%" height="100%">
@@ -149,10 +198,13 @@ export function Analytics({ tasks }: AnalyticsProps) {
             </div>
 
             <Card>
-                <CardHeader>
-                    <CardTitle className="text-sm font-medium">
-                        Hourly Activity
-                    </CardTitle>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <div className="flex items-center gap-2">
+                        <CardTitle className="text-sm font-medium">
+                            Hourly Activity
+                        </CardTitle>
+                        <InfoTooltip content="Frequency of task starts throughout the day." />
+                    </div>
                 </CardHeader>
                 <CardContent className="h-[300px]">
                     <ResponsiveContainer width="100%" height="100%">
@@ -183,6 +235,53 @@ export function Analytics({ tasks }: AnalyticsProps) {
                             />
                         </LineChart>
                     </ResponsiveContainer>
+                </CardContent>
+            </Card>
+
+            <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <div className="flex items-center gap-2">
+                        <CardTitle className="text-sm font-medium">
+                            Task Transition Probability (%)
+                        </CardTitle>
+                        <InfoTooltip content="Probability of switching to another task type based on your history. Helps identify focus-breaking patterns." />
+                    </div>
+                </CardHeader>
+                <CardContent>
+                    <div className="overflow-x-auto">
+                        <table className="w-full text-xs text-left border-collapse">
+                            <thead>
+                                <tr>
+                                    <th className="p-2 border border-border bg-muted/50">From \ To</th>
+                                    {[
+                                        "proj", "meet", "comm", "doc", "crea", "rese", "plan", "brea"
+                                    ].map(t => (
+                                        <th key={t} className="p-2 border border-border bg-muted/50 capitalize">{t}</th>
+                                    ))}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {transitionData.map((row, i) => (
+                                    <tr key={i}>
+                                        <td className="p-2 border border-border font-medium bg-muted/30 capitalize whitespace-nowrap">{row.name.substring(0, 10)}</td>
+                                        {[
+                                            "project-work", "meeting", "communication", "documentation", "creative-work", "research", "planning", "break"
+                                        ].map(type => (
+                                            <td key={type} className="p-2 border border-border text-center" style={{
+                                                backgroundColor: row[type] > 0 ? `rgba(61, 240, 141, ${Math.min(0.8, row[type] / 100 + 0.1)})` : 'transparent',
+                                                color: row[type] > 40 ? '#000' : '#fff'
+                                            }}>
+                                                {row[type] > 0 ? `${row[type]}%` : '-'}
+                                            </td>
+                                        ))}
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                    <p className="text-[10px] text-muted-foreground mt-4">
+                        Probability of switching to a task type (columns) given the current task type (rows).
+                    </p>
                 </CardContent>
             </Card>
         </div>

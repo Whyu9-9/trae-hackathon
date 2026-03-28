@@ -148,7 +148,10 @@ function App() {
                     </TabsContent>
 
                     <TabsContent value="analytics">
-                        <Analytics tasks={tasks} />
+                        <Analytics
+                            tasks={tasks}
+                            switches={contextSwitches}
+                        />
                     </TabsContent>
 
                     <TabsContent value="insights">
