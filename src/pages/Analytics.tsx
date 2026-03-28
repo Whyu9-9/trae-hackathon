@@ -39,8 +39,8 @@ export function Analytics({ tasks, switches }: AnalyticsProps) {
     }, [tasks]);
 
     const transitionData = useMemo(() => {
-        const transitions: Record<string, Record<string, number>> = {};
-        const types = [
+        const transitions = {} as Record<TaskType, Record<TaskType, number>>;
+        const types: TaskType[] = [
             "project-work",
             "meeting",
             "communication",
@@ -53,7 +53,7 @@ export function Analytics({ tasks, switches }: AnalyticsProps) {
 
         // Initialize matrix
         types.forEach((from) => {
-            transitions[from] = {};
+            transitions[from] = {} as Record<TaskType, number>;
             types.forEach((to) => {
                 transitions[from][to] = 0;
             });
@@ -61,19 +61,30 @@ export function Analytics({ tasks, switches }: AnalyticsProps) {
 
         // Count transitions
         switches.forEach((sw) => {
-            if (transitions[sw.fromTask] && transitions[sw.fromTask][sw.toTask] !== undefined) {
+            if (
+                transitions[sw.fromTask] &&
+                transitions[sw.fromTask][sw.toTask] !== undefined
+            ) {
                 transitions[sw.fromTask][sw.toTask]++;
             }
         });
 
         // Convert to probability matrix
         return types.map((from) => {
-            const row: Record<string, any> = { name: from.replace("-", " ") };
-            const totalFrom = Object.values(transitions[from]).reduce((a, b) => a + b, 0);
-            
+            const row = { name: from.replace("-", " ") } as {
+                name: string;
+            } & Record<TaskType, number>;
+            const totalFrom = Object.values(transitions[from]).reduce(
+                (a, b) => a + b,
+                0,
+            );
+
             types.forEach((to) => {
                 const count = transitions[from][to];
-                row[to] = totalFrom > 0 ? parseFloat(((count / totalFrom) * 100).toFixed(1)) : 0;
+                row[to] =
+                    totalFrom > 0
+                        ? parseFloat(((count / totalFrom) * 100).toFixed(1))
+                        : 0;
             });
             return row;
         });
@@ -252,26 +263,63 @@ export function Analytics({ tasks, switches }: AnalyticsProps) {
                         <table className="w-full text-xs text-left border-collapse">
                             <thead>
                                 <tr>
-                                    <th className="p-2 border border-border bg-muted/50">From \ To</th>
+                                    <th className="p-2 border border-border bg-muted/50">
+                                        From \ To
+                                    </th>
                                     {[
-                                        "proj", "meet", "comm", "doc", "crea", "rese", "plan", "brea"
-                                    ].map(t => (
-                                        <th key={t} className="p-2 border border-border bg-muted/50 capitalize">{t}</th>
+                                        "proj",
+                                        "meet",
+                                        "comm",
+                                        "doc",
+                                        "crea",
+                                        "rese",
+                                        "plan",
+                                        "brea",
+                                    ].map((t) => (
+                                        <th
+                                            key={t}
+                                            className="p-2 border border-border bg-muted/50 capitalize"
+                                        >
+                                            {t}
+                                        </th>
                                     ))}
                                 </tr>
                             </thead>
                             <tbody>
                                 {transitionData.map((row, i) => (
                                     <tr key={i}>
-                                        <td className="p-2 border border-border font-medium bg-muted/30 capitalize whitespace-nowrap">{row.name.substring(0, 10)}</td>
+                                        <td className="p-2 border border-border font-medium bg-muted/30 capitalize whitespace-nowrap">
+                                            {row.name.substring(0, 10)}
+                                        </td>
                                         {[
-                                            "project-work", "meeting", "communication", "documentation", "creative-work", "research", "planning", "break"
-                                        ].map(type => (
-                                            <td key={type} className="p-2 border border-border text-center" style={{
-                                                backgroundColor: row[type] > 0 ? `rgba(61, 240, 141, ${Math.min(0.8, row[type] / 100 + 0.1)})` : 'transparent',
-                                                color: row[type] > 40 ? '#000' : '#fff'
-                                            }}>
-                                                {row[type] > 0 ? `${row[type]}%` : '-'}
+                                            "project-work",
+                                            "meeting",
+                                            "communication",
+                                            "documentation",
+                                            "creative-work",
+                                            "research",
+                                            "planning",
+                                            "break",
+                                        ].map((type) => (
+                                            <td
+                                                key={type}
+                                                className="p-2 border border-border text-center"
+                                                style={{
+                                                    backgroundColor:
+                                                        row[type as TaskType] >
+                                                        0
+                                                            ? `rgba(61, 240, 141, ${Math.min(0.8, row[type as TaskType] / 100 + 0.1)})`
+                                                            : "transparent",
+                                                    color:
+                                                        row[type as TaskType] >
+                                                        40
+                                                            ? "#000"
+                                                            : "#fff",
+                                                }}
+                                            >
+                                                {row[type as TaskType] > 0
+                                                    ? `${row[type as TaskType]}%`
+                                                    : "-"}
                                             </td>
                                         ))}
                                     </tr>
@@ -280,7 +328,8 @@ export function Analytics({ tasks, switches }: AnalyticsProps) {
                         </table>
                     </div>
                     <p className="text-[10px] text-muted-foreground mt-4">
-                        Probability of switching to a task type (columns) given the current task type (rows).
+                        Probability of switching to a task type (columns) given
+                        the current task type (rows).
                     </p>
                 </CardContent>
             </Card>
