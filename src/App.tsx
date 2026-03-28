@@ -149,10 +149,10 @@ function App() {
         <div className="min-h-screen bg-background text-foreground flex flex-col font-sans">
             <Header />
 
-            <main className="flex-1 container py-8">
-                <div className="flex items-center justify-between mb-8">
-                    <div>
-                        <h2 className="text-3xl font-bold tracking-tight">
+            <main className="flex-1 container px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-6 sm:mb-8">
+                    <div className="min-w-0">
+                        <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">
                             Dashboard
                         </h2>
                         <p className="text-muted-foreground">
@@ -160,9 +160,13 @@ function App() {
                         </p>
                     </div>
 
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 w-full sm:w-auto">
                         {activeTask ? (
-                            <Button variant="destructive" onClick={stopTask}>
+                            <Button
+                                variant="destructive"
+                                onClick={stopTask}
+                                className="w-full sm:w-auto"
+                            >
                                 <LucideSquare className="w-4 h-4 mr-2" />
                                 Stop {activeTask.type.replace("-", " ")}
                             </Button>
@@ -172,7 +176,10 @@ function App() {
                                 onOpenChange={setIsDialogOpen}
                             >
                                 <DialogTrigger asChild>
-                                    <Button variant="default">
+                                    <Button
+                                        variant="default"
+                                        className="w-full sm:w-auto"
+                                    >
                                         <LucidePlay className="w-4 h-4 mr-2" />
                                         Start New Task
                                     </Button>
@@ -237,7 +244,7 @@ function App() {
                 </div>
 
                 <Tabs defaultValue="overview" className="space-y-4">
-                    <TabsList className="bg-card border w-full justify-start md:w-auto">
+                    <TabsList className="bg-card border w-full md:w-auto justify-start overflow-x-auto flex-nowrap max-w-full">
                         <TabsTrigger value="overview">Overview</TabsTrigger>
                         <TabsTrigger value="analytics">Analytics</TabsTrigger>
                         <TabsTrigger value="insights">Insights</TabsTrigger>
@@ -272,7 +279,7 @@ function App() {
             <Dialog open={isAIInsightOpen} onOpenChange={setIsAIInsightOpen}>
                 <DialogTrigger asChild>
                     <Button
-                        className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg"
+                        className="fixed z-50 bottom-4 right-4 sm:bottom-6 sm:right-6 h-12 w-12 sm:h-14 sm:w-14 rounded-full shadow-lg"
                         size="icon"
                         onClick={() => {
                             setIsAIInsightOpen(true);

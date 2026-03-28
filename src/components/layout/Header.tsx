@@ -39,15 +39,15 @@ export function Header() {
 
     return (
         <header className="border-b bg-card">
-            <div className="container flex items-center justify-between h-16">
-                <div className="flex items-center gap-2">
+            <div className="container px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-3 h-16">
+                <div className="flex items-center gap-2 min-w-0">
                     <LucideLayout className="w-6 h-6 text-primary" />
-                    <h1 className="text-xl font-bold tracking-tight">
+                    <h1 className="text-base sm:text-xl font-bold tracking-tight truncate">
                         Trae Hackathon
                     </h1>
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1 sm:gap-2 shrink-0">
                     <Button
                         variant="ghost"
                         size="icon"
@@ -56,17 +56,17 @@ export function Header() {
                     >
                         <LucideDownload className="w-5 h-5" />
                     </Button>
-                    <label className="cursor-pointer">
-                        <input
-                            type="file"
-                            className="hidden"
-                            accept=".json"
-                            onChange={handleImport}
-                        />
-                        <div className="p-2 hover:bg-accent hover:text-accent-foreground rounded-md transition-colors">
+                    <Button variant="ghost" size="icon" asChild>
+                        <label className="cursor-pointer" title="Import Data">
+                            <input
+                                type="file"
+                                className="hidden"
+                                accept=".json"
+                                onChange={handleImport}
+                            />
                             <LucideUpload className="w-5 h-5" />
-                        </div>
-                    </label>
+                        </label>
+                    </Button>
 
                     <Dialog>
                         <DialogTrigger asChild>
@@ -88,19 +88,26 @@ export function Header() {
                             </DialogHeader>
                             <div className="space-y-4 text-sm text-muted-foreground">
                                 <p>
-                                    <strong>The Cost:</strong> It takes an
-                                    average of 23 minutes to fully regain focus
-                                    after a significant interruption.
+                                    <span className="font-semibold text-foreground">
+                                        The Cost:
+                                    </span>{" "}
+                                    It takes an average of 23 minutes to fully
+                                    regain focus after a significant
+                                    interruption.
                                 </p>
                                 <p>
-                                    <strong>Recovery:</strong> This tool helps
-                                    you track these switches and quantify the
-                                    time lost to help you build better focus
-                                    habits.
+                                    <span className="font-semibold text-foreground">
+                                        Recovery:
+                                    </span>{" "}
+                                    This tool helps you track these switches and
+                                    quantify the time lost to help you build
+                                    better focus habits.
                                 </p>
-                                <p>
-                                    <strong>Tips:</strong>
-                                    <ul className="list-disc list-inside">
+                                <div>
+                                    <div className="font-semibold text-foreground">
+                                        Tips:
+                                    </div>
+                                    <ul className="mt-2 list-disc list-inside space-y-1">
                                         <li>Group similar tasks together.</li>
                                         <li>
                                             Use "Deep Work" blocks for project
@@ -111,7 +118,7 @@ export function Header() {
                                             communication.
                                         </li>
                                     </ul>
-                                </p>
+                                </div>
                             </div>
                         </DialogContent>
                     </Dialog>
