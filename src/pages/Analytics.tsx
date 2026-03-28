@@ -23,9 +23,16 @@ import { InfoTooltip } from "@/components/ui/info-tooltip";
 interface AnalyticsProps {
     tasks: TaskEntry[];
     switches: ContextSwitchPenalty[];
+    exportMode?: boolean;
 }
 
-export function Analytics({ tasks, switches }: AnalyticsProps) {
+export function Analytics({ tasks, switches, exportMode }: AnalyticsProps) {
+    const chartHeightClass = exportMode ? "h-[520px]" : "h-[300px]";
+    const axisFontSize = exportMode ? 12 : 10;
+    const pieOuterRadius = exportMode ? 170 : 80;
+    const topGridClass = exportMode
+        ? "grid grid-cols-1 gap-6"
+        : "grid grid-cols-1 md:grid-cols-2 gap-6";
     const distributionData = useMemo(() => {
         const counts: Record<string, number> = {};
         tasks.forEach((task) => {
@@ -123,8 +130,8 @@ export function Analytics({ tasks, switches }: AnalyticsProps) {
 
     return (
         <div className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <Card>
+            <div className={topGridClass}>
+                <Card className="chart-to-export">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <div className="flex items-center gap-2">
                             <CardTitle className="text-sm font-medium">
@@ -133,7 +140,7 @@ export function Analytics({ tasks, switches }: AnalyticsProps) {
                             <InfoTooltip content="Shows the count of each task type logged today." />
                         </div>
                     </CardHeader>
-                    <CardContent className="h-[300px]">
+                    <CardContent className={chartHeightClass}>
                         <ResponsiveContainer width="100%" height="100%">
                             <BarChart data={distributionData}>
                                 <CartesianGrid
@@ -142,10 +149,13 @@ export function Analytics({ tasks, switches }: AnalyticsProps) {
                                 />
                                 <XAxis
                                     dataKey="name"
-                                    fontSize={10}
+                                    fontSize={axisFontSize}
                                     tick={{ fill: "#888" }}
                                 />
-                                <YAxis fontSize={10} tick={{ fill: "#888" }} />
+                                <YAxis
+                                    fontSize={axisFontSize}
+                                    tick={{ fill: "#888" }}
+                                />
                                 <Tooltip
                                     contentStyle={{
                                         backgroundColor: "#18181b",
@@ -166,7 +176,7 @@ export function Analytics({ tasks, switches }: AnalyticsProps) {
                     </CardContent>
                 </Card>
 
-                <Card>
+                <Card className="chart-to-export">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <div className="flex items-center gap-2">
                             <CardTitle className="text-sm font-medium">
@@ -175,14 +185,14 @@ export function Analytics({ tasks, switches }: AnalyticsProps) {
                             <InfoTooltip content="Total minutes spent on each task type today." />
                         </div>
                     </CardHeader>
-                    <CardContent className="h-[300px]">
+                    <CardContent className={chartHeightClass}>
                         <ResponsiveContainer width="100%" height="100%">
                             <PieChart>
                                 <Pie
                                     data={durationData}
                                     cx="50%"
                                     cy="50%"
-                                    outerRadius={80}
+                                    outerRadius={pieOuterRadius}
                                     fill="#8884d8"
                                     dataKey="value"
                                     label={({ name }) => name}
@@ -208,7 +218,7 @@ export function Analytics({ tasks, switches }: AnalyticsProps) {
                 </Card>
             </div>
 
-            <Card>
+            <Card className="chart-to-export">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <div className="flex items-center gap-2">
                         <CardTitle className="text-sm font-medium">
@@ -217,7 +227,7 @@ export function Analytics({ tasks, switches }: AnalyticsProps) {
                         <InfoTooltip content="Frequency of task starts throughout the day." />
                     </div>
                 </CardHeader>
-                <CardContent className="h-[300px]">
+                <CardContent className={chartHeightClass}>
                     <ResponsiveContainer width="100%" height="100%">
                         <LineChart data={hourlyData}>
                             <CartesianGrid
@@ -226,10 +236,13 @@ export function Analytics({ tasks, switches }: AnalyticsProps) {
                             />
                             <XAxis
                                 dataKey="hour"
-                                fontSize={10}
+                                fontSize={axisFontSize}
                                 tick={{ fill: "#888" }}
                             />
-                            <YAxis fontSize={10} tick={{ fill: "#888" }} />
+                            <YAxis
+                                fontSize={axisFontSize}
+                                tick={{ fill: "#888" }}
+                            />
                             <Tooltip
                                 contentStyle={{
                                     backgroundColor: "#18181b",

@@ -1,8 +1,14 @@
-import { LucideHelpCircle, LucideDownload, LucideUpload } from "lucide-react";
+import {
+    LucideHelpCircle,
+    LucideDownload,
+    LucideUpload,
+    LucideFileSpreadsheet,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTasks } from "@/hooks/useTasks";
-import { exportTasks, importTasks } from "@/lib/storage";
+import { exportTasks, exportTasksToExcel, importTasks } from "@/lib/storage";
 import { toast } from "sonner";
+import { toPng } from "html-to-image";
 import {
     Dialog,
     DialogContent,
@@ -13,11 +19,46 @@ import {
 } from "@/components/ui/dialog";
 
 export function Header() {
-    const { tasks, importAllTasks } = useTasks();
+    const { tasks, importAllTasks, contextSwitches } = useTasks();
 
     const handleExport = () => {
         exportTasks(tasks);
         toast.success("Tasks exported successfully");
+    };
+
+    const handleExportExcel = async () => {
+        const exportContainer = document.getElementById("excel-export-container");
+        const chartElements = exportContainer?.querySelectorAll(".chart-to-export");
+        const chartImages: string[] = [];
+
+        if (chartElements && chartElements.length > 0) {
+            toast.info("Preparing Excel report...");
+            await new Promise((resolve) => setTimeout(resolve, 800));
+
+            for (const el of Array.from(chartElements)) {
+                try {
+                    const dataUrl = await toPng(el as HTMLElement, {
+                        backgroundColor: "#09090b",
+                        pixelRatio: 2,
+                        cacheBust: true,
+                    });
+
+                    const base64 = dataUrl.includes("base64,")
+                        ? dataUrl.split("base64,")[1]
+                        : dataUrl;
+                    chartImages.push(base64);
+                } catch (err) {
+                    console.error(err);
+                }
+            }
+        }
+
+        await exportTasksToExcel(tasks, contextSwitches, chartImages);
+        toast.success(
+            chartImages.length > 0
+                ? `Excel exported with ${chartImages.length} charts`
+                : "Excel exported",
+        );
     };
 
     const handleImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,6 +95,14 @@ export function Header() {
                         title="Export Data"
                     >
                         <LucideDownload className="w-5 h-5" />
+                    </Button>
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => void handleExportExcel()}
+                        title="Export Excel"
+                    >
+                        <LucideFileSpreadsheet className="w-5 h-5" />
                     </Button>
                     <Button variant="ghost" size="icon" asChild>
                         <label className="cursor-pointer" title="Import Data">

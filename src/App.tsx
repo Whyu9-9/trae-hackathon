@@ -273,6 +273,14 @@ function App() {
                 </Tabs>
             </main>
 
+            <div
+                id="excel-export-container"
+                className="fixed -left-[9999px] top-0 w-[1600px] pointer-events-none"
+                aria-hidden="true"
+            >
+                <Analytics tasks={tasks} switches={contextSwitches} exportMode />
+            </div>
+
             <Footer />
             <Toaster position="bottom-right" theme="dark" />
 
