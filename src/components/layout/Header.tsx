@@ -1,9 +1,4 @@
-import {
-    LucideLayout,
-    LucideHelpCircle,
-    LucideDownload,
-    LucideUpload,
-} from "lucide-react";
+import { LucideHelpCircle, LucideDownload, LucideUpload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTasks } from "@/hooks/useTasks";
 import { exportTasks, importTasks } from "@/lib/storage";
@@ -41,7 +36,11 @@ export function Header() {
         <header className="border-b bg-card">
             <div className="container px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-3 h-16">
                 <div className="flex items-center gap-2 min-w-0">
-                    <LucideLayout className="w-6 h-6 text-primary" />
+                    <img
+                        src="/icons.png"
+                        alt="Trae Hackathon"
+                        className="w-6 h-6"
+                    />
                     <h1 className="text-base sm:text-xl font-bold tracking-tight truncate">
                         Trae Hackathon
                     </h1>
