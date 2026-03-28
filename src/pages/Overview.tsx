@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import type { TaskEntry, ContextSwitchPenalty } from "@/types/task";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { InstrumentStrip } from "@/components/dashboard/InstrumentStrip";
-import { LucideZap, LucideClock, LucideAlertTriangle } from "lucide-react";
+import { LucideZap, LucideAlertTriangle } from "lucide-react";
 
 interface OverviewProps {
   tasks: TaskEntry[];

@@ -1,7 +1,6 @@
 import { useMemo } from "react";
 import type { TaskEntry, ContextSwitchPenalty } from "@/types/task";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import {
     LucideLightbulb,
     LucideTrendingUp,

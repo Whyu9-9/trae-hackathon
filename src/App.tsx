@@ -7,7 +7,7 @@ import { Insights } from "@/pages/Insights";
 import { History } from "@/pages/History";
 import { useTasks } from "@/hooks/useTasks";
 import { Button } from "@/components/ui/button";
-import { LucidePlay, LucideSquare, LucidePlus } from "lucide-react";
+import { LucidePlay, LucideSquare } from "lucide-react";
 import {
     Dialog,
     DialogContent,
