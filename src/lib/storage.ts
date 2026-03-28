@@ -11,12 +11,12 @@ export const loadTasks = (): TaskEntry[] => {
     if (!tasks) return [];
 
     try {
-        const parsedTasks = JSON.parse(tasks);
-        return parsedTasks.map((task: any) => ({
-            ...task,
-            startTime: new Date(task.startTime),
-            endTime: task.endTime ? new Date(task.endTime) : undefined,
-        }));
+    const parsedTasks = JSON.parse(tasks);
+    return parsedTasks.map((task: TaskEntry) => ({
+      ...task,
+      startTime: new Date(task.startTime),
+      endTime: task.endTime ? new Date(task.endTime) : undefined,
+    }));
     } catch (error) {
         console.error("Failed to parse tasks from localStorage:", error);
         return [];
@@ -46,7 +46,7 @@ export const importTasks = async (file: File): Promise<TaskEntry[]> => {
             try {
                 const tasks = JSON.parse(event.target?.result as string);
                 resolve(
-                    tasks.map((task: any) => ({
+                    tasks.map((task: TaskEntry) => ({
                         ...task,
                         startTime: new Date(task.startTime),
                         endTime: task.endTime
